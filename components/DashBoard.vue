@@ -19,14 +19,12 @@
     <Dialog :isOpenDialog = "isOpenDialog" @saveData = "saveData" @resetValue="resetValue" />
 
 </template>
-
 <style>
 body {
   background-color: rgb(205, 190, 167);
   color: #fff;
 }
 </style>
-
 <script setup>
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref as fRef, onValue, set  } from "firebase/database"; 
@@ -149,7 +147,7 @@ onMounted(() => {
 
   setInterval(()=>{
     
-    co2Concentration.value.push((Math.random() * (100 - 50) + 50).toFixed());
+    co2Concentration.value.push((Math.random() * (5000 - 100) + 100).toFixed());
     outsideTemperature.value.push((Math.random() * (100 - 50) + 50).toFixed());
     roomTemperature.value.push((Math.random() * (100 - 50) + 50).toFixed());
     roomHumidity.value.push((Math.random() * (100 - 50) + 50).toFixed());
