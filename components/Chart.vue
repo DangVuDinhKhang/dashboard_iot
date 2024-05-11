@@ -1,15 +1,15 @@
 <template>  
     <div class="flex mt-5 flex-wrap">
-      <div class="co2-cycle flex-1 w-auto lg:w-1/4 lg:mx-10 mx-9 mb-4 md:mb-0 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'co2Concentration')">
-        <div class="absolute top-[41%] left-[30%] text-6xl font-bold">{{ co2Concentration[co2Concentration.length - 1] }}</div>
+      <div class="co2-cycle flex-1 w-1 lg:w-1/4 lg:mx-10 mx-14 mb-8 md:mb-0 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'co2Concentration')">
+        <div class="absolute top-[41%] left-[30%] text-5xl font-bold">{{ co2Concentration[co2Concentration.length - 1] }}</div>
         <div class="absolute top-[75%] left-[41%] text-xl font-bold">PPM</div>
         <Doughnut :data="co2ConcentrationHalfCycleChartData" :options="co2ConcentrationHalfCycleChartOptions" />
         <div class="absolute bottom-[0%] left-[25%] text-sm">0</div>
         <div class="absolute bottom-[0%] left-[67%] text-sm">100</div>
         <img src="../public/assets/icon/co2.png" alt="co2 icon" class="absolute co2-img top-[-10%] left-[-10%] text-4xl">
       </div>
-      <div class="humidity-cycle w-auto lg:w-1/4 lg:mx-10 mx-9 mb-4 md:mb-0 flex-1 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'roomHumidity')" >
-        <div class="absolute top-[41%] left-[38%] text-6xl font-bold">{{ roomHumidity[roomHumidity.length - 1] }}</div>
+      <div class="humidity-cycle w-1 lg:w-1/4 lg:mx-10 mx-14 mb-8 md:mb-0 flex-1 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'roomHumidity')" >
+        <div class="absolute top-[43%] left-[38%] text-5xl font-bold">{{ roomHumidity[roomHumidity.length - 1] }}</div>
         <div class="absolute top-[75%] left-[45%] text-xl font-bold">%</div>
         <Doughnut :data="placeHolderChartData" :options="placeHolderChartOptions" class="absolute z-20 mt-4"/>
         <Doughnut :data="edgeChartData" :options="edgeChartOptions" class="absolute z-10 mt-4"/>
@@ -18,14 +18,14 @@
         <div class="absolute bottom-[0%] left-[67%] text-sm">100</div>
         <img src="../public/assets/icon/PhunSuong_OFF.png" alt="humidity icon" class="absolute humidity-img top-[-10%] left-[-10%] text-4xl">
       </div>
-      <div class="temperature-cycle w-auto lg:w-1/4 mb-4 md:mb-0 lg:mx-10 mx-9 flex-1 flex justify-center relative shadow-2xl pb-1 hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'outsideTemperature')">
-        <div class="absolute top-[41%] left-[40%] text-6xl font-bold">{{ outsideTemperature[outsideTemperature.length - 1] }}</div>
+      <div class="temperature-cycle w-1 lg:w-1/4 mb-8 md:mb-0 lg:mx-10 mx-14 flex-1 flex justify-center relative shadow-2xl pb-1 hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'outsideTemperature')">
+        <div class="absolute top-[41%] left-[40%] text-5xl font-bold">{{ outsideTemperature[outsideTemperature.length - 1] }}</div>
         <div class="absolute top-[75%] left-[47%] text-xl font-bold">&ordm;C</div>
         <Doughnut :data="outsideTemperatureHalfCycleChartData" :options="outsideTemperatureHalfCycleChartOptions" />
         <img src="../public/assets/icon/temperature.png" alt="temperature icon" class="absolute outside-temperature-img top-[-20%] left-[-20%] text-4xl">
       </div>
-      <div class="temperature-cycle room w-auto lg:w-1/4 mb-4 md:mb-0 lg:mx-10 mx-9 flex-1 flex justify-center relative shadow-2xl pb-1 hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'roomTemperature')">
-        <div class="absolute top-[41%] left-[40%] text-6xl font-bold">{{ roomTemperature[roomTemperature.length - 1] }}</div>
+      <div class="temperature-cycle room w-1 lg:w-1/4 mb-8 md:mb-0 lg:mx-10 mx-14 flex-1 flex justify-center relative shadow-2xl pb-1 hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'roomTemperature')">
+        <div class="absolute top-[41%] left-[40%] text-5xl font-bold">{{ roomTemperature[roomTemperature.length - 1] }}</div>
         <div class="absolute top-[75%] left-[47%] text-xl font-bold">&ordm;C</div>
         <Doughnut :data="roomTemperatureHalfCycleChartData" :options="roomTemperatureHalfCycleChartOptions" />
         <img src="../public/assets/icon/temperature.png" alt="temperature icon" class="absolute room-temperature-img top-[-20%] left-[-20%] text-4xl">
@@ -34,7 +34,7 @@
     <div class="flex flex-col sm:flex-row mt-5">
       <Line :data="temperatureChartData" :options="temperatureChartOptions" class="outside-temperature max-w-[95%] lg:max-w-[49%] ml-3 order-last sm:order-first"/>
       <div class="flex order-first sm:order-last">
-        <div 
+        <div  
           class="w-[40%] h-[70%] lg:my-20 mx-auto lg:mx-20 shadow-lg shadow hover:shadow-2xl px-10 cursor-pointer rounded-3xl bg-[#fff7d6]" 
           @click="$emit('updateValue', 'fan', fan)"
         >
@@ -113,10 +113,19 @@
   padding: 2px
 }
 
-@media only screen and (max-width: 640px) {
+@media only screen and (max-width: 700px) {
   .co2, .outside-temperature, .room-temperature, .room-humidity {
     height: 300px !important;
     max-height: 300px;
+  }
+
+  .outside-temperature {
+    margin-top: 20px !important;
+  }
+
+  .co2-cycle, .humidity-cycle, .temperature-cycle {
+    width: 270px !important;
+    max-width: 270px !important;
   }
 }
 

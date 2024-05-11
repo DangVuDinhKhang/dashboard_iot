@@ -4,7 +4,5 @@ export default defineNuxtConfig({
   modules: [
     '@nuxtjs/tailwindcss',
   ],
-  // plugins: [
-  //   { src: '~/plugins/vue-toast-notification', mode: 'client' }
-  // ],
+  ssr: false
 })
