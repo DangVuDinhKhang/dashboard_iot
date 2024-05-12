@@ -3,7 +3,7 @@ on:
   push:
     branches: [nuxt]
 env:
-  BUILD_FOLDER: .output/public # or .output/public/yourrepositoryname/
+  BUILD_FOLDER: .output/public/dashboard_iot_fe # or .output/public/yourrepositoryname/
 jobs:
   build:
     runs-on: ubuntu-latest
