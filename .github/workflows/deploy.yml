@@ -33,3 +33,5 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ${{env.BUILD_FOLDER}}
+          publish_dir: ./dist
+          publish_branch: master
