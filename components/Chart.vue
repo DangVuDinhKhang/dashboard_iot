@@ -155,8 +155,8 @@ const roomHumidity = ref([]);
 const time = ref([]);
 const fan = ref();
 const mist = ref();
-const fan_img = ref('/assets/icon/Fan_OFF.png');
-const mist_img = ref('/assets/icon/PhunSuong_OFF.png');
+const fan_img = ref('');
+const mist_img = ref('');
 
 const edge = ref([100]);
 const placeHolder = ref([100]);
@@ -392,8 +392,8 @@ const updateHalfCycleChart = (type, typeChart, typeChartOption, title, color) =>
 }
 
 const updateFanAndMistImg = () => {
-  fan.value == 1 ? fan_img.value = '/assets/icon/Fan_ON.png' : fan_img.value = '/assets/icon/Fan_OFF.png';
-  mist.value == 1 ? mist_img.value = '/assets/icon/PhunSuong_ON.png' : mist_img.value = '/assets/icon/PhunSuong_OFF.png'
+  fan.value == 1 ? fan_img.value = './assets/icon/Fan_ON.png' : fan_img.value = './assets/icon/Fan_OFF.png';
+  mist.value == 1 ? mist_img.value = './assets/icon/PhunSuong_ON.png' : mist_img.value = './assets/icon/PhunSuong_OFF.png'
 }
 
 watchEffect(() => {
@@ -423,6 +423,11 @@ onMounted(() => {
   if (window.innerWidth < 1024) {
     fontSize.value = 9;
   }
+
+  // if (window.location.href.includes('github')) {
+  //   fan_img = '../' + fan_img;
+  //   mist_img = '../' + mist_img;
+  // }
   
 })
 
