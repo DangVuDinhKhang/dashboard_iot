@@ -1,9 +1,10 @@
 name: Deploy to GitHub pages
 on:
   push:
-    branches: [nuxt]
+    branches: 
+      - master
 env:
-  BUILD_FOLDER: .output/public/dashboard_iot_fe # or .output/public/yourrepositoryname/
+  BUILD_FOLDER: .output/public # or .output/public/yourrepositoryname/
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -33,5 +34,3 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@v4
         with:
           folder: ${{env.BUILD_FOLDER}}
-          publish_dir: ./dist
-          publish_branch: master
