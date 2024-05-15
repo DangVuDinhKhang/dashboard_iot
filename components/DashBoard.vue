@@ -53,13 +53,13 @@ const roomHumidityManualRef = fRef(db, 'Tb/state/room_humidity_manual');
 const fanRef = fRef(db, 'Tb/state/fan');
 const mistRef = fRef(db, 'Tb/state/mist');
 
-const co2Concentration = ref([0]);
-const outsideTemperature = ref([0]);
-const roomTemperature = ref([0]);
-const roomHumidity = ref([0]);
+const co2Concentration = ref([]);
+const outsideTemperature = ref([]);
+const roomTemperature = ref([]);
+const roomHumidity = ref([]);
 const fan = ref();
 const mist = ref();
-const time = ref(['']);
+const time = ref([]);
 const isOpenDialog = ref(false);
 const typeSetting = ref();
 const isSuccess = ref(false);
@@ -68,7 +68,8 @@ const getData = (type) => {
   
   onValue(type, (snapshot) => {
     
-    switch (type._path.pieces_[2]) {  
+    console.log(type._path.pieces_[2])
+    switch (type._path.pieces_[2]) { 
       case 'co2_concentration': co2Concentration.value.push(Math.round(parseFloat(snapshot.val()))); break;
       case 'outside_temperature': outsideTemperature.value.push(Math.round(parseFloat(snapshot.val()))); break;
       case 'room_temperature': roomTemperature.value.push(Math.round(parseFloat(snapshot.val()))); break;
@@ -85,8 +86,6 @@ const getAllData = () => {
   getData(outsideTemperatureRef);
   getData(roomTemperatureRef);
   getData(roomHumidityRef);
-  getData(fanRef);
-  getData(mistRef);
 }
 
 const updateValue = (type, data) => {
@@ -138,25 +137,20 @@ const resetValue = () => {
   typeSetting.value = '';
 }
 
-
 onMounted(() => {
 
-
-  getData(fanRef);
-  getData(mistRef);
-
+  // getData(fanRef);
+  // getData(mistRef);
+  // getAllData();
+  // const today = new Date();
+  //   time.value.push(today.toLocaleTimeString());
   setInterval(()=>{
-    
-    co2Concentration.value.push((Math.random() * (5000 - 100) + 100).toFixed());
-    outsideTemperature.value.push((Math.random() * (100 - 50) + 50).toFixed());
-    roomTemperature.value.push((Math.random() * (100 - 50) + 50).toFixed());
-    roomHumidity.value.push((Math.random() * (100 - 50) + 50).toFixed());
+
+    getAllData();
     const today = new Date();
     time.value.push(today.toLocaleTimeString());
 
-    
-
-  }, 5000)
+  }, 3000)
 
 
 })
