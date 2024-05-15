@@ -67,8 +67,6 @@ const isSuccess = ref(false);
 const getData = (type) => {
   
   onValue(type, (snapshot) => {
-    
-    console.log(type._path.pieces_[2])
     switch (type._path.pieces_[2]) { 
       case 'co2_concentration': co2Concentration.value.push(Math.round(parseFloat(snapshot.val()))); break;
       case 'outside_temperature': outsideTemperature.value.push(Math.round(parseFloat(snapshot.val()))); break;
@@ -139,11 +137,8 @@ const resetValue = () => {
 
 onMounted(() => {
 
-  // getData(fanRef);
-  // getData(mistRef);
-  // getAllData();
-  // const today = new Date();
-  //   time.value.push(today.toLocaleTimeString());
+  getData(fanRef);
+  getData(mistRef);
   setInterval(()=>{
 
     getAllData();

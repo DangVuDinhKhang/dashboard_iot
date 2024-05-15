@@ -43,7 +43,7 @@
           <div class="text-md lg:text-4xl text-center mt-2 lg:mt-5 text-black">Status: {{ fan ? 'ON' : 'OFF' }}</div>
         </div>
         <div 
-          class="w-[40%] h-[70%] lg:my-20 mx-auto shadow-lg shadow hover:shadow-2xl px-10 cursor-pointer rounded-3xl bg-[#ada6c7]" 
+          class="w-[40%] h-[70%] lg:my-20 mx-auto shadow-lg shadow hover:shadow-2xl px-10 cursor-pointer rounded-3xl bg-[#b1aab6]" 
           @click="$emit('updateValue', 'mist', mist)"
         >
           <div class="text-md lg:text-4xl mt-7 text-center mb-2 text-black">Mist</div>

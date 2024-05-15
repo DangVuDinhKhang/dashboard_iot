@@ -83,7 +83,6 @@ const emit = defineEmits(['resetValue', 'saveData']);
 const resetValue = () => {
     needToUpdateValue.value = 0;
     emit('resetValue');
-    console.log('davao')
 }
 
 const saveData = () => {
