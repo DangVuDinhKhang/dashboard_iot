@@ -2,9 +2,9 @@
     <Toast v-if="isSuccess"/>
     <Chart 
       :co2Concentration = "co2Concentration[co2Concentration.length - 1]"
-      :outsideTemperature = "outsideTemperature[co2Concentration.length - 1]"
-      :roomTemperature = "roomTemperature[co2Concentration.length - 1]"
-      :roomHumidity = "roomHumidity[co2Concentration.length - 1]"
+      :outsideTemperature = "outsideTemperature[outsideTemperature.length - 1]"
+      :roomTemperature = "roomTemperature[roomTemperature.length - 1]"
+      :roomHumidity = "roomHumidity[roomHumidity.length - 1]"
       :fan = "fan"
       :mist= "mist"
       :time = "time[time.length - 1]"
@@ -70,7 +70,7 @@ const getData = (type) => {
       case 'room_humidity': roomHumidity.value.push(Math.round(parseFloat(snapshot.val()))); break;
       case 'fan': fan.value = Number(snapshot.val()); break;
       case 'mist': mist.value = Number(snapshot.val()); break;
-
+      default: break;
     } 
   });
 }
@@ -80,6 +80,7 @@ const getAllData = () => {
   getData(outsideTemperatureRef);
   getData(roomTemperatureRef);
   getData(roomHumidityRef);
+
 }
 
 const updateValue = (type, data) => {
@@ -91,7 +92,7 @@ const updateValue = (type, data) => {
       data == 0 ? data = 1 : data = 0; break;
     case 'mist': 
       refType = mistRef; 
-      data == 0 ? data = 1 : data = 0;break;
+      data == 0 ? data = 1 : data = 0; break;
     case 'co2Concentration':
       refType = co2ConcentrationManualRef; break;
     case 'roomHumidity':

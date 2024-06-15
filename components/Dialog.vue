@@ -96,6 +96,5 @@ const saveData = () => {
 watchEffect(() => {
     openDialog.value = props.isOpenDialog;
     typeSetting.value = props.typeSetting;
-    console.log(props.typeSetting)
 })
 </script>

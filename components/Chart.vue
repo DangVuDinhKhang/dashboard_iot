@@ -261,7 +261,7 @@ const onValueChange = () => {
 
   deleteOldValue(time);
   time.value.push(props.time);
-  
+
 }
 
 const deleteOldValue = (type) => {
