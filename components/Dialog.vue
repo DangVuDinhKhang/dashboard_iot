@@ -15,7 +15,8 @@
                     <div class="mt-10">
                       <input type="number" id="username" v-model="needToUpdateValue" class="block w-100 rounded-md border-0 py-2 pl-2 pr-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring" placeholder="" min="0">
                       <div class="slider">
-                        <input type = "range" min="0" max="100" v-model="needToUpdateValue"/>
+                        <input v-if="typeSetting == 'co2Concentration'" type = "range" min="0" max="5000" v-model="needToUpdateValue"/>
+                        <input v-else type = "range" min="0" max="100" v-model="needToUpdateValue"/>
                       </div>
                     </div>
                   </div>
@@ -74,8 +75,10 @@ import { Dialog, DialogPanel, DialogTitle, TransitionChild, TransitionRoot } fro
 
 const props = defineProps({
   isOpenDialog: Boolean,
+  typeSetting: String
 });
-const openDialog = ref(true);   
+const openDialog = ref(true);  
+const typeSetting = ref(''); 
 const needToUpdateValue = ref(0);
 
 const emit = defineEmits(['resetValue', 'saveData']);
@@ -92,5 +95,7 @@ const saveData = () => {
 
 watchEffect(() => {
     openDialog.value = props.isOpenDialog;
+    typeSetting.value = props.typeSetting;
+    console.log(props.typeSetting)
 })
 </script>

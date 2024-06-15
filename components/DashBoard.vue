@@ -1,8 +1,4 @@
 <template>
-    <!-- <p>{{ co2Concentration[co2Concentration.length - 1] }}</p>
-    <p>{{ outsideTemperature[co2Concentration.length - 1] }}</p>
-    <p>{{ roomTemperature[co2Concentration.length - 1] }}</p>
-    <p>{{ roomHumidity[co2Concentration.length - 1] }}</p> -->
     <Toast v-if="isSuccess"/>
     <Chart 
       :co2Concentration = "co2Concentration[co2Concentration.length - 1]"
@@ -16,7 +12,7 @@
       @openSetting = "openSetting" 
     />
 
-    <Dialog :isOpenDialog = "isOpenDialog" @saveData = "saveData" @resetValue="resetValue" />
+    <Dialog :isOpenDialog = "isOpenDialog" :typeSetting = "typeSetting" @saveData = "saveData" @resetValue="resetValue" />
 
 </template>
 <style>
@@ -122,8 +118,8 @@ const updateValue = (type, data) => {
 }
 
 const openSetting = (type) => {
-  isOpenDialog.value = true;
   typeSetting.value = type;
+  isOpenDialog.value = true;
 }
 
 const saveData = (data) => {

@@ -1,7 +1,7 @@
 <template>  
     <div class="flex mt-5 flex-wrap">
       <div class="co2-cycle flex-1 w-1 lg:w-1/4 lg:mx-10 mx-14 mb-8 md:mb-0 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'co2Concentration')">
-        <div class="absolute top-[41%] left-[30%] text-5xl font-bold">{{ co2Concentration[co2Concentration.length - 1] }}</div>
+        <div class="absolute top-[41%] left-[30%] text-5xl font-bold w-[40%] text-center">{{ co2Concentration[co2Concentration.length - 1] }}</div>
         <div class="absolute top-[75%] left-[41%] text-xl font-bold">PPM</div>
         <Doughnut :data="co2ConcentrationHalfCycleChartData" :options="co2ConcentrationHalfCycleChartOptions" />
         <div class="absolute bottom-[0%] left-[25%] text-sm">0</div>
@@ -423,17 +423,8 @@ onMounted(() => {
   if (window.innerWidth < 1024) {
     fontSize.value = 9;
   }
-
-  // if (window.location.href.includes('github')) {
-  //   fan_img = '../' + fan_img;
-  //   mist_img = '../' + mist_img;
-  // }
   
 })
-
-
-
-
 
 </script>
 
