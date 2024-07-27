@@ -172,6 +172,12 @@ const co2ConcentrationChartData = ref({
 });
 const co2ConcentrationChartOptions = ref({
   responsive: true,
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 5000
+    }
+  },
   plugins: {
     legend: {
       position: 'top'
@@ -185,6 +191,12 @@ const temperatureChartData = ref({
 });
 const temperatureChartOptions = ref({
   responsive: true,
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 100
+    }
+  },
   plugins: {
     legend: {
       position: 'top',
@@ -198,6 +210,12 @@ const roomHumidityChartData = ref({
 });
 const roomHumidityChartOptions = ref({
   responsive: true,
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 100
+    }
+  },
   plugins: {
     legend: {
       position: 'top'
@@ -248,24 +266,34 @@ const placeHolderChartOptions = ref();
 const onValueChange = () => {
 
   deleteOldValue(co2Concentration);
-  co2Concentration.value.push(props.co2Concentration);
+  if (props.co2Concentration !== undefined) {
+    co2Concentration.value.push(props.co2Concentration);
+  }
 
   deleteOldValue(outsideTemperature);
-  outsideTemperature.value.push(props.outsideTemperature);
+  if (props.outsideTemperature !== undefined) {
+    outsideTemperature.value.push(props.outsideTemperature);
+  }
 
   deleteOldValue(roomTemperature);
-  roomTemperature.value.push(props.roomTemperature);
+  if (props.roomTemperature !== undefined) {
+    roomTemperature.value.push(props.roomTemperature);
+  }
 
   deleteOldValue(roomHumidity);
-  roomHumidity.value.push(props.roomHumidity);
+  if (props.roomHumidity !== undefined) {
+    roomHumidity.value.push(props.roomHumidity);
+  }
 
   deleteOldValue(time);
-  time.value.push(props.time);
+  if (time.value[time.value.length - 1] !== props.time) {
+    time.value.push(props.time);
+  }
 
 }
 
 const deleteOldValue = (type) => {
-  if (type.value.length > 4) {
+  if (type.value.length > 19) {
     type.value.splice(0, 1)
   }
 }
@@ -276,7 +304,7 @@ const updateChart = (type, typeChart, title, color) => {
     datasets: [
       {
         label: title, 
-        data: [type.value[0], type.value[1], type.value[2], type.value[3], type.value[4]],
+        data: type.value.slice(),
         backgroundColor: color,
         borderColor: color,
         datalabels: {
@@ -299,7 +327,7 @@ const updateTemperatureChart = () => {
     datasets: [
       {
         label: 'Outside Temperature', 
-        data: [outsideTemperature.value[0], outsideTemperature.value[1], outsideTemperature.value[2], outsideTemperature.value[3], outsideTemperature.value[4]],
+        data: outsideTemperature.value.slice(),
         backgroundColor: '#fd1d1d',
         borderColor: '#fd1d1d',
         datalabels: {
@@ -313,12 +341,12 @@ const updateTemperatureChart = () => {
       },
       {
         label: 'Room Temperature', 
-        data: [roomTemperature.value[0], roomTemperature.value[1], roomTemperature.value[2], roomTemperature.value[3], roomTemperature.value[4]],
+        data: roomTemperature.value.slice(),
         backgroundColor: '#62cc4c',
         borderColor: '#62cc4c',
         datalabels: {
           color: '#fff',
-          align: 'top',
+          align: 'bottom',
           font: {
             size: fontSize.value
           }

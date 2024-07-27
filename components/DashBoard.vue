@@ -1,5 +1,6 @@
 <template>
-    <Toast v-if="isSuccess"/>
+    <Toast v-if="isSuccess" :type = "'info'"/>
+    <Toast v-if="isCo2ConcentrationHigherThanCo2ConcentrationManual" :type = "'warning'"/>
     <Chart 
       :co2Concentration = "co2Concentration[co2Concentration.length - 1]"
       :outsideTemperature = "outsideTemperature[outsideTemperature.length - 1]"
@@ -53,12 +54,14 @@ const co2Concentration = ref([]);
 const outsideTemperature = ref([]);
 const roomTemperature = ref([]);
 const roomHumidity = ref([]);
+const co2ConcentrationManual = ref();
 const fan = ref();
 const mist = ref();
 const time = ref([]);
 const isOpenDialog = ref(false);
 const typeSetting = ref();
 const isSuccess = ref(false);
+const isCo2ConcentrationHigherThanCo2ConcentrationManual = ref(false);
 
 const getData = (type) => {
   
@@ -68,6 +71,7 @@ const getData = (type) => {
       case 'outside_temperature': outsideTemperature.value.push(Math.round(parseFloat(snapshot.val()))); break;
       case 'room_temperature': roomTemperature.value.push(Math.round(parseFloat(snapshot.val()))); break;
       case 'room_humidity': roomHumidity.value.push(Math.round(parseFloat(snapshot.val()))); break;
+      case 'co2_concentration_manual': co2ConcentrationManual.value = Math.round(parseFloat(snapshot.val())); break;
       case 'fan': fan.value = Number(snapshot.val()); break;
       case 'mist': mist.value = Number(snapshot.val()); break;
       default: break;
@@ -80,7 +84,14 @@ const getAllData = () => {
   getData(outsideTemperatureRef);
   getData(roomTemperatureRef);
   getData(roomHumidityRef);
-
+  getData(co2ConcentrationManualRef);
+  
+  if (co2Concentration.value[co2Concentration.value.length - 1] > co2ConcentrationManual.value) {
+    isCo2ConcentrationHigherThanCo2ConcentrationManual.value = true;
+  } else {
+    isCo2ConcentrationHigherThanCo2ConcentrationManual.value = false;
+  }
+  
 }
 
 const updateValue = (type, data) => {
