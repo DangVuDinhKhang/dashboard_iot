@@ -2,6 +2,7 @@
     <Toast v-if="isSuccess" :type = "'info'"/>
     <Toast v-if="isCo2ConcentrationHigherThanCo2ConcentrationManual" :type = "'warning'"/>
     <Chart 
+      v-if="!isMushroomHouse"
       :co2Concentration = "co2Concentration[co2Concentration.length - 1]"
       :outsideTemperature = "outsideTemperature[outsideTemperature.length - 1]"
       :roomTemperature = "roomTemperature[roomTemperature.length - 1]"
@@ -9,6 +10,18 @@
       :fan = "fan"
       :mist= "mist"
       :time = "time[time.length - 1]"
+      @updateValue = "updateValue"
+      @openSetting = "openSetting" 
+    />
+    <Chart 
+      v-if = "isMushroomHouse"
+      :temperature = "temperature[temperature.length - 1]"
+      :humidity = "humidity[humidity.length - 1]"
+      :light = "light[light.length - 1]"
+      :heater = "heater"
+      :mistMushroom= "mistMushroom"
+      :time = "time[time.length - 1]"
+      :isMushroomHouse = "isMushroomHouse"
       @updateValue = "updateValue"
       @openSetting = "openSetting" 
     />
@@ -25,6 +38,7 @@ body {
 <script setup>
 import { initializeApp } from 'firebase/app';
 import { getDatabase, ref as fRef, onValue, set  } from "firebase/database"; 
+import { getAnalytics } from "firebase/analytics";
 
 const firebaseConfig = {
   apiKey: "AIzaSyAgzP_84CmYH4Oe403ySujF5gZpIZfi0eA",
@@ -36,6 +50,17 @@ const firebaseConfig = {
   appId: "1:405318153874:web:982c4d2f9014409e02584b",
   measurementId: "G-VTLBLY5WEJ"
 };
+
+// const mushroomHousefirebaseConfig = {
+//   apiKey: "AIzaSyDRFjfVBP1WvPGSy-JziArnaVIQpl5XVpc",
+//   authDomain: "iot-project-4fcde.firebaseapp.com",
+//   databaseURL: "https://iot-project-4fcde-default-rtdb.asia-southeast1.firebasedatabase.app",
+//   projectId: "iot-project-4fcde",
+//   storageBucket: "iot-project-4fcde.appspot.com",
+//   messagingSenderId: "587330592346",
+//   appId: "1:587330592346:web:1d9aae9d6abe55f0d3c263",
+//   measurementId: "G-F7JHMENLHE"
+// };
 
 const app = initializeApp(firebaseConfig);
 const db = getDatabase(app);
@@ -63,8 +88,26 @@ const typeSetting = ref();
 const isSuccess = ref(false);
 const isCo2ConcentrationHigherThanCo2ConcentrationManual = ref(false);
 
+const isMushroomHouse = ref(false);
+
+// const appMushroom = initializeApp(mushroomHousefirebaseConfig, "mushroom_house");
+// const dbMushroom = getDatabase(appMushroom);
+const temperatureRef = fRef(db, 'mushroom_tb/sensor/temperature');
+const humidityRef = fRef(db, 'mushroom_tb/sensor/humidity');
+const lightRef = fRef(db, 'mushroom_tb/sensor/light');
+const temperatureManualRef = fRef(db, 'mushroom_tb/state/temperature_manual');
+const humidityManualRef = fRef(db, 'mushroom_tb/state/humidity_manual');
+const lightManualRef = fRef(db, 'mushroom_tb/state/light_manual');
+const heaterRef = fRef(db, 'mushroom_tb/state/heater');
+const mistRefMushroom = fRef(db, 'mushroom_tb/state/mist');
+
+const temperature = ref([]);
+const humidity = ref([]);
+const light = ref([]);
+const heater = ref();
+const mistMushroom = ref();
+
 const getData = (type) => {
-  
   onValue(type, (snapshot) => {
     switch (type._path.pieces_[2]) { 
       case 'co2_concentration': co2Concentration.value.push(Math.round(parseFloat(snapshot.val()))); break;
@@ -74,6 +117,20 @@ const getData = (type) => {
       case 'co2_concentration_manual': co2ConcentrationManual.value = Math.round(parseFloat(snapshot.val())); break;
       case 'fan': fan.value = Number(snapshot.val()); break;
       case 'mist': mist.value = Number(snapshot.val()); break;
+      default: break;
+    } 
+  });
+}
+
+const getDataForMushroom = (type) => {
+  onValue(type, (snapshot) => {
+    console.log(snapshot)
+    switch (type._path.pieces_[2]) { 
+      case 'temperature': temperature.value.push(Math.round(parseFloat(snapshot.val()))); break;
+      case 'humidity': humidity.value.push(Math.round(parseFloat(snapshot.val()))); break;
+      case 'light': light.value.push(Math.round(parseFloat(snapshot.val()))); break;
+      case 'heater': heater.value = Number(snapshot.val()); break;
+      case 'mist': mistMushroom.value = Number(snapshot.val()); break;
       default: break;
     } 
   });
@@ -91,7 +148,12 @@ const getAllData = () => {
   } else {
     isCo2ConcentrationHigherThanCo2ConcentrationManual.value = false;
   }
-  
+}
+
+const getAllDataForMushroom = () => {
+  getDataForMushroom(temperatureRef);
+  getDataForMushroom(humidityRef);
+  getDataForMushroom(lightRef);
 }
 
 const updateValue = (type, data) => {
@@ -104,6 +166,12 @@ const updateValue = (type, data) => {
     case 'mist': 
       refType = mistRef; 
       data == 0 ? data = 1 : data = 0; break;
+    case 'heater':
+      refType = heaterRef;
+      data == 0 ? data = 1 : data = 0; break;
+    case 'mistMushroom':
+      refType = mistRefMushroom; 
+      data == 0 ? data = 1 : data = 0; break;
     case 'co2Concentration':
       refType = co2ConcentrationManualRef; break;
     case 'roomHumidity':
@@ -112,6 +180,12 @@ const updateValue = (type, data) => {
       refType = outsideTemperatureManualRef; break;
     case 'roomTemperature':
       refType = roomTemperatureManualRef; break;
+    case 'light':
+      refType = lightManualRef; break;
+    case 'humidity':
+      refType = humidityManualRef; break;
+    case 'temperature':
+      refType = temperatureManualRef; break;
   }
 
   set(refType, data.toString())
@@ -143,13 +217,25 @@ const resetValue = () => {
   typeSetting.value = '';
 }
 
+onBeforeMount(() => {
+  const route = useRoute();
+  if (route.query.page === 'mushroom_house') {
+    isMushroomHouse.value = true
+  }
+})
+
 onMounted(() => {
 
   getData(fanRef);
   getData(mistRef);
+  getDataForMushroom(heaterRef);
+  getDataForMushroom(mistRefMushroom);
   setInterval(()=>{
-
-    getAllData();
+    if (!isMushroomHouse.value) {
+      getAllData();
+    } else {
+      getAllDataForMushroom();
+    }
     const today = new Date();
     time.value.push(today.toLocaleTimeString());
 

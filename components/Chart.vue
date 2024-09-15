@@ -1,30 +1,52 @@
 <template>  
-    <div class="flex mt-5 flex-wrap">
-      <div class="co2-cycle flex-1 w-1 lg:w-1/4 lg:mx-10 mx-14 mb-8 md:mb-0 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'co2Concentration')">
-        <div class="absolute top-[41%] text-5xl font-bold">{{ co2Concentration[co2Concentration.length - 1] }}</div>
+    <div class="flex mt-5 flex-wrap" :class="isMushroomHouse ? 'justify-center' : ''">
+      <div 
+        class="co2-cycle w-1 lg:w-1/4 lg:mx-10 mx-14 mb-8 md:mb-0 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer" 
+        :class="!isMushroomHouse ? 'flex-1': ''"
+        @click="!isMushroomHouse ? updateManualValue('co2Concentration') : updateManualValue('light')"
+      >
+      
+        <div v-if="!isMushroomHouse" class="absolute top-[41%] text-5xl font-bold">{{ co2Concentration[co2Concentration.length - 1] }}</div>
+        <div v-if="isMushroomHouse" class="absolute top-[41%] text-5xl font-bold">{{ light[light.length - 1] }}</div>
         <div class="absolute top-[75%] text-xl font-bold">PPM</div>
-        <Doughnut :data="co2ConcentrationHalfCycleChartData" :options="co2ConcentrationHalfCycleChartOptions" />
+        <Doughnut v-if="!isMushroomHouse" :data="co2ConcentrationHalfCycleChartData" :options="co2ConcentrationHalfCycleChartOptions" />
+        <Doughnut v-if="isMushroomHouse" :data="lightHalfCycleChartData" :options="lightHalfCycleChartOptions" />
         <div class="absolute bottom-[0%] left-[25%] text-sm">0</div>
-        <div class="absolute bottom-[0%] left-[67%] text-sm">100</div>
-        <img src="../public/assets/icon/co2.png" alt="co2 icon" class="absolute co2-img top-[-10%] left-[-10%] text-4xl">
+        <div v-if="!isMushroomHouse" class="absolute bottom-[0%] left-[67%] text-sm">100</div>
+        <div v-if="isMushroomHouse" class="absolute bottom-[0%] left-[67%] text-sm">2000</div>
+        <img v-if="!isMushroomHouse" src="../public/assets/icon/co2.png" alt="co2 icon" class="absolute co2-img top-[-10%] left-[-10%] text-4xl">
+        <img v-if="isMushroomHouse" src="../public/assets/icon/Light.png" alt="co2 icon" class="absolute co2-img top-[-10%] left-[-10%] text-4xl">
       </div>
-      <div class="humidity-cycle w-1 lg:w-1/4 lg:mx-10 mx-14 mb-8 md:mb-0 flex-1 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'roomHumidity')" >
-        <div class="absolute top-[43%] text-5xl font-bold">{{ roomHumidity[roomHumidity.length - 1] }}</div>
+      <div 
+        class="humidity-cycle w-1 lg:w-1/4 lg:mx-10 mx-14 mb-8 md:mb-0 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer"
+        :class="!isMushroomHouse ? 'flex-1' : ''"
+        @click="!isMushroomHouse ? updateManualValue('roomHumidity') : updateManualValue('humidity')" 
+      >
+        <div v-if="!isMushroomHouse" class="absolute top-[43%] text-5xl font-bold">{{ roomHumidity[roomHumidity.length - 1] }}</div>
+        <div v-if="isMushroomHouse" class="absolute top-[43%] text-5xl font-bold">{{ humidity[humidity.length - 1] }}</div>
         <div class="absolute top-[75%] text-xl font-bold">%</div>
         <Doughnut :data="placeHolderChartData" :options="placeHolderChartOptions" class="absolute z-20 mt-4"/>
         <Doughnut :data="edgeChartData" :options="edgeChartOptions" class="absolute z-10 mt-4"/>
-        <Doughnut :data="roomHumidityHalfCycleChartData" :options="roomHumidityHalfCycleChartOptions" />
+        <Doughnut v-if="!isMushroomHouse" :data="roomHumidityHalfCycleChartData" :options="roomHumidityHalfCycleChartOptions" />
+        <Doughnut v-if="isMushroomHouse" :data="humidityHalfCycleChartData" :options="humidityHalfCycleChartOptions" />
         <div class="absolute bottom-[0%] left-[25%] text-sm">0</div>
         <div class="absolute bottom-[0%] left-[67%] text-sm">100</div>
         <img src="../public/assets/icon/PhunSuong_OFF.png" alt="humidity icon" class="absolute humidity-img top-[-10%] left-[-10%] text-4xl">
       </div>
-      <div class="temperature-cycle w-1 lg:w-1/4 mb-8 md:mb-0 lg:mx-10 mx-14 flex-1 flex justify-center relative shadow-2xl pb-1 hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'outsideTemperature')">
-        <div class="absolute top-[41%] text-5xl font-bold">{{ outsideTemperature[outsideTemperature.length - 1] }}</div>
+      <div 
+        class="temperature-cycle w-1 lg:w-1/4 mb-8 md:mb-0 lg:mx-10 mx-14 flex justify-center relative shadow-2xl pb-1 hover:opacity-80 cursor-pointer" 
+        :class="!isMushroomHouse ? 'flex-1' : ''"
+        @click="!isMushroomHouse ? updateManualValue('outsideTemperature') : updateManualValue('temperature')"
+      >
+        <div v-if="!isMushroomHouse" class="absolute top-[41%] text-5xl font-bold">{{ outsideTemperature[outsideTemperature.length - 1] }}</div>
+        <div v-if="isMushroomHouse" class="absolute top-[41%] text-5xl font-bold">{{ temperature[temperature.length - 1] }}</div>
         <div class="absolute top-[75%] text-xl font-bold">&ordm;C</div>
-        <Doughnut :data="outsideTemperatureHalfCycleChartData" :options="outsideTemperatureHalfCycleChartOptions" />
-        <img src="../public/assets/icon/temperature.png" alt="temperature icon" class="absolute outside-temperature-img top-[-20%] left-[-20%] text-4xl">
+        <Doughnut v-if="!isMushroomHouse" :data="outsideTemperatureHalfCycleChartData" :options="outsideTemperatureHalfCycleChartOptions" />
+        <Doughnut v-if="isMushroomHouse" :data="temperatureHalfCycleChartData" :options="temperatureHalfCycleChartOptions" />
+        <img v-if="!isMushroomHouse" src="../public/assets/icon/temperature.png" alt="temperature icon" class="absolute outside-temperature-img top-[-20%] left-[-20%] text-4xl">
+        <img v-if="isMushroomHouse" src="../public/assets/icon/temperature.png" alt="temperature icon" class="absolute outside-temperature-img top-[-20%] left-[-15%] text-4xl">
       </div>
-      <div class="temperature-cycle room w-1 lg:w-1/4 mb-8 md:mb-0 lg:mx-10 mx-14 flex-1 flex justify-center relative shadow-2xl pb-1 hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'roomTemperature')">
+      <div v-if="!isMushroomHouse" class="temperature-cycle room w-1 lg:w-1/4 mb-8 md:mb-0 lg:mx-10 mx-14 flex-1 flex justify-center relative shadow-2xl pb-1 hover:opacity-80 cursor-pointer" @click="$emit('openSetting', 'roomTemperature')">
         <div class="absolute top-[41%] text-5xl font-bold">{{ roomTemperature[roomTemperature.length - 1] }}</div>
         <div class="absolute top-[75%] text-xl font-bold">&ordm;C</div>
         <Doughnut :data="roomTemperatureHalfCycleChartData" :options="roomTemperatureHalfCycleChartOptions" />
@@ -32,8 +54,11 @@
       </div>      
     </div>
     <div class="flex flex-col sm:flex-row mt-5">
-      <Line :data="temperatureChartData" :options="temperatureChartOptions" class="outside-temperature max-w-[95%] lg:max-w-[49%] ml-3 order-last sm:order-first"/>
-      <div class="flex order-first sm:order-last content-center">
+      <Line 
+        :data="temperatureChartData" :options="temperatureChartOptions" 
+        class="outside-temperature max-w-[95%] lg:max-w-[49%] ml-3 order-last sm:order-first"
+      />
+      <div v-if="!isMushroomHouse" class="flex order-first sm:order-last content-center">
         <div  
           class="w-[40%] h-[70%] lg:my-20 mx-auto lg:mx-20 shadow-lg shadow hover:shadow-2xl px-10 cursor-pointer rounded-3xl bg-[#fff7d6]" 
           @click="$emit('updateValue', 'fan', fan)"
@@ -51,16 +76,43 @@
           <div class="text-md lg:text-4xl text-center mt-2 lg:mt-5 text-black">Status: {{ mist ? 'ON' : 'OFF' }}</div> 
         </div>
       </div>
+      <div v-if="isMushroomHouse" class="flex order-first sm:order-last content-center">
+        <div  
+          class="w-[40%] h-[70%] lg:my-20 mx-auto lg:mx-20 shadow-lg shadow hover:shadow-2xl px-10 cursor-pointer rounded-3xl bg-[#fff7d6]" 
+          @click="$emit('updateValue', 'heater', heater)"
+        >
+          <div class="text-md lg:text-4xl mt-7 text-center mb-2 text-black">Heater</div>
+          <img class="heater-img" :src="heater_img" alt="heater" > 
+          <div class="text-md lg:text-4xl text-center mt-2 lg:mt-5 text-black">Status: {{ heater ? 'ON' : 'OFF' }}</div>
+        </div>
+        <div 
+          class="w-[40%] h-[70%] lg:my-20 mx-auto shadow-lg shadow hover:shadow-2xl px-10 cursor-pointer rounded-3xl bg-[#b1aab6]" 
+          @click="$emit('updateValue', 'mistMushroom', mistMushroom)"
+        >
+          <div class="text-md lg:text-4xl mt-7 text-center mb-2 text-black">Mist</div>
+          <img class="mist-mushroom-img" :src="mistMushroom_img" alt="mist" >
+          <div class="text-md lg:text-4xl text-center mt-2 lg:mt-5 text-black">Status: {{ mistMushroom ? 'ON' : 'OFF' }}</div> 
+        </div>
+      </div>
     </div>
     
-    <div class="flex flex-col sm:flex-row mt-5">
+    <div class="flex flex-col sm:flex-row mt-5" v-if="!isMushroomHouse">
       <Line :data="co2ConcentrationChartData" :options="co2ConcentrationChartOptions" class="co2 max-w-[49%] max-w-[95%] lg:max-w-[49%] ml-3"/>
       <Line :data="roomHumidityChartData" :options="roomHumidityChartOptions" class="room-humidity max-w-[49%] max-w-[95%] lg:max-w-[49%] ml-3"/>
     </div>  
+    <div class="flex flex-col sm:flex-row mt-5" v-if="isMushroomHouse">
+      <Line :data="lightChartData" :options="lightChartOptions" class="light max-w-[49%] max-w-[95%] lg:max-w-[49%] ml-3"/>
+      <Line :data="humidityChartData" :options="humidityChartOptions" class="humidity max-w-[49%] max-w-[95%] lg:max-w-[49%] ml-3"/>
+    </div> 
 </template>
 
 <style>
-.co2, .outside-temperature, .room-temperature, .room-humidity {
+.mushroom {
+  max-width: 75%;
+  
+}
+
+.co2, .outside-temperature, .room-temperature, .room-humidity, .humidity, .light {
   /* max-width: 49%; */
   height: 500px !important;
   max-height: 500px;
@@ -103,11 +155,11 @@
   z-index: 1;
 }
 
-.fan-img, .mist-img {
+.fan-img, .mist-img, .heater-img, .mist-mushroom-img {
   width: 200px !important;
 }
 
-.mist-img {
+.mist-img, .mist-mushroom-img {
   border: 4px solid #323030;
   border-radius: 20px;
   padding: 2px
@@ -145,7 +197,13 @@ const props = defineProps({
   roomHumidity: Number,
   time: String,
   fan: Number,
-  mist: Number
+  mist: Number,
+  temperature: Number,
+  humidity: Number,
+  light: Number,
+  heater: Number,
+  mistMushroom: Number,
+  isMushroomHouse: Boolean
 });
 
 const co2Concentration = ref([]);
@@ -160,9 +218,17 @@ const mist_img = ref('');
 
 const edge = ref([100]);
 const placeHolder = ref([100]);
-
 const fontSize = ref(12);
 
+const temperature = ref([]);
+const humidity = ref([]);
+const light = ref([]);
+const heater = ref();
+const mistMushroom = ref();
+const heater_img = ref('');
+const mistMushroom_img = ref('');
+
+const isMushroomHouse = ref(false);
 
 ChartJS.register(...registerables, ChartDataLabels);
 
@@ -223,6 +289,44 @@ const roomHumidityChartOptions = ref({
   },
 });
 
+const humidityChartData = ref({
+  labels: [],
+  datasets: [{ data: [] }]
+});
+const humidityChartOptions = ref({
+  responsive: true,
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 100
+    }
+  },
+  plugins: {
+    legend: {
+      position: 'top'
+    } 
+  },
+});
+
+const lightChartData = ref({
+  labels: [],
+  datasets: [{ data: [] }]
+});
+const lightChartOptions = ref({
+  responsive: true,
+  scales: {
+    y: {
+      beginAtZero: true,
+      max: 2000
+    }
+  },
+  plugins: {
+    legend: {
+      position: 'top'
+    } 
+  },
+});
+
 const co2ConcentrationHalfCycleChartData = ref({
   labels: [],
   datasets: [{ data: [] }]
@@ -254,6 +358,33 @@ const roomTemperatureHalfCycleChartData = ref({
 });
 
 const roomTemperatureHalfCycleChartOptions = ref({
+  responsive: true,
+});
+
+const temperatureHalfCycleChartData = ref({
+  labels: [],
+  datasets: [{ data: [] }]
+});
+
+const temperatureHalfCycleChartOptions = ref({
+  responsive: true,
+});
+
+const humidityHalfCycleChartData = ref({
+  labels: [],
+  datasets: [{ data: [] }]
+});
+
+const humidityHalfCycleChartOptions = ref({
+  responsive: true,
+});
+
+const lightHalfCycleChartData = ref({
+  labels: [],
+  datasets: [{ data: [] }]
+});
+
+const lightHalfCycleChartOptions = ref({
   responsive: true,
 });
 
@@ -290,6 +421,29 @@ const onValueChange = () => {
     time.value.push(props.time);
   }
 
+}
+
+const onMushroomValueChange = () => {
+
+  deleteOldValue(temperature);
+  if (props.temperature !== undefined) {
+    temperature.value.push(props.temperature);
+  }
+
+  deleteOldValue(light);
+  if (props.light !== undefined) {
+    light.value.push(props.light);
+  }
+
+  deleteOldValue(humidity);
+  if (props.humidity !== undefined) {
+    humidity.value.push(props.humidity);
+  }
+
+  deleteOldValue(time);
+  if (time.value[time.value.length - 1] !== props.time) {
+    time.value.push(props.time);
+  }
 }
 
 const deleteOldValue = (type) => {
@@ -398,8 +552,6 @@ const updateHalfCycleChart = (type, typeChart, typeChartOption, title, color) =>
     ],
   }
 
-  
-
   typeChartOption.value = {
     rotation: rotation,
     circumference: circumference,
@@ -419,32 +571,62 @@ const updateHalfCycleChart = (type, typeChart, typeChartOption, title, color) =>
   }
 }
 
+const emit = defineEmits(['openSetting'])
+
 const updateFanAndMistImg = () => {
   fan.value == 1 ? fan_img.value = './assets/icon/Fan_ON.png' : fan_img.value = './assets/icon/Fan_OFF.png';
   mist.value == 1 ? mist_img.value = './assets/icon/PhunSuong_ON.png' : mist_img.value = './assets/icon/PhunSuong_OFF.png'
+  heater.value == 1 ? heater_img.value = './assets/icon/heater_ON.png' : heater_img.value = './assets/icon/heater_OFF.png';
+  mistMushroom.value == 1 ? mistMushroom_img.value = './assets/icon/PhunSuong_ON.png' : mistMushroom_img.value = './assets/icon/PhunSuong_OFF.png'
+}
+
+const updateManualValue = (type) => {
+  emit('openSetting', type);
 }
 
 watchEffect(() => {
+  if (!isMushroomHouse.value) {
+    onValueChange();
+    
+    updateChart(co2Concentration, co2ConcentrationChartData, 'CO2 Concentration', '#9ea1a7');
+    updateChart(roomHumidity, roomHumidityChartData, 'Room Humidity', '#05c8ff');
+    updateTemperatureChart();
+
+    updateHalfCycleChart(co2Concentration, co2ConcentrationHalfCycleChartData, co2ConcentrationHalfCycleChartOptions, 'CO2 Concentration', '#9ea1a7');
+    updateHalfCycleChart(roomHumidity, roomHumidityHalfCycleChartData, roomHumidityHalfCycleChartOptions, 'Humidity', '#05c8ff');
+    updateHalfCycleChart(outsideTemperature, outsideTemperatureHalfCycleChartData, outsideTemperatureHalfCycleChartOptions, 'Outside Temperature', '#ff0000');
+    updateHalfCycleChart(roomTemperature, roomTemperatureHalfCycleChartData, roomTemperatureHalfCycleChartOptions, 'Room Temperature', '#62cc4c');
+
+    updateHalfCycleChart(edge, edgeChartData, edgeChartOptions, 'Edge', 'rgb(224, 201, 163)');
+    updateHalfCycleChart(placeHolder, placeHolderChartData, placeHolderChartOptions, 'PlaceHolder', '#05c8ff');
+  } else {
+    onMushroomValueChange();
+
+    updateChart(light, lightChartData, 'light', '#f7ff00');
+    updateChart(humidity, humidityChartData, 'humidity', '#05c8ff');
+    updateChart(temperature, temperatureChartData, 'temperature', '#fd1d1d');
+
+    updateHalfCycleChart(humidity, humidityHalfCycleChartData, humidityHalfCycleChartOptions, 'Humidity', '#05c8ff');
+    updateHalfCycleChart(temperature, temperatureHalfCycleChartData, temperatureHalfCycleChartOptions, 'Temperature', '#ff0000');
+    updateHalfCycleChart(light, lightHalfCycleChartData, lightHalfCycleChartOptions, 'Light', '#62cc4c');
+
+    updateHalfCycleChart(edge, edgeChartData, edgeChartOptions, 'Edge', 'rgb(224, 201, 163)');
+    updateHalfCycleChart(placeHolder, placeHolderChartData, placeHolderChartOptions, 'PlaceHolder', '#05c8ff');
+  }
+
   
-  onValueChange();
-
-  updateChart(co2Concentration, co2ConcentrationChartData, 'CO2 Concentration', '#9ea1a7');
-  updateChart(roomHumidity, roomHumidityChartData, 'Room Humidity', '#05c8ff');
-  updateTemperatureChart();
-
-  updateHalfCycleChart(co2Concentration, co2ConcentrationHalfCycleChartData, co2ConcentrationHalfCycleChartOptions, 'CO2 Concentration', '#9ea1a7');
-  updateHalfCycleChart(roomHumidity, roomHumidityHalfCycleChartData, roomHumidityHalfCycleChartOptions, 'Humidity', '#05c8ff');
-  updateHalfCycleChart(outsideTemperature, outsideTemperatureHalfCycleChartData, outsideTemperatureHalfCycleChartOptions, 'Outside Temperature', '#ff0000');
-  updateHalfCycleChart(roomTemperature, roomTemperatureHalfCycleChartData, roomTemperatureHalfCycleChartOptions, 'Room Temperature', '#62cc4c');
-
-  updateHalfCycleChart(edge, edgeChartData, edgeChartOptions, 'Edge', 'rgb(224, 201, 163)');
-  updateHalfCycleChart(placeHolder, placeHolderChartData, placeHolderChartOptions, 'PlaceHolder', '#05c8ff');
 });
 
 watchEffect(() => {
   fan.value = props.fan;
   mist.value = props.mist;
+  heater.value = props.heater;
+  mistMushroom.value = props.mistMushroom;
   updateFanAndMistImg();
+})
+
+onBeforeMount(() => {
+  isMushroomHouse.value = props.isMushroomHouse;
 })
 
 onMounted(() => {
