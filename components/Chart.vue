@@ -2,7 +2,7 @@
     <div class="flex mt-5 flex-wrap" :class="isMushroomHouse ? 'justify-center' : ''">
       <div 
         class="co2-cycle w-1 lg:w-1/4 lg:mx-10 mx-14 mb-8 md:mb-0 flex justify-center relative shadow-2xl hover:opacity-80 cursor-pointer" 
-        :class="!isMushroomHouse ? 'flex-1': ''"
+        :class="!isMushroomHouse ? 'flex-1': 'bg-green'"
         @click="!isMushroomHouse ? updateManualValue('co2Concentration') : updateManualValue('light')"
       >
       
@@ -123,6 +123,10 @@
   max-height: 200px;
   background-color: rgb(215, 229, 63);
   border-radius: 20px;
+}
+
+.bg-green {
+  background-color: rgb(117, 221, 137) !important;
 }
 
 .temperature-cycle {
@@ -608,7 +612,7 @@ watchEffect(() => {
 
     updateHalfCycleChart(humidity, humidityHalfCycleChartData, humidityHalfCycleChartOptions, 'Humidity', '#05c8ff');
     updateHalfCycleChart(temperature, temperatureHalfCycleChartData, temperatureHalfCycleChartOptions, 'Temperature', '#ff0000');
-    updateHalfCycleChart(light, lightHalfCycleChartData, lightHalfCycleChartOptions, 'Light', '#62cc4c');
+    updateHalfCycleChart(light, lightHalfCycleChartData, lightHalfCycleChartOptions, 'Light', '#f7ff00');
 
     updateHalfCycleChart(edge, edgeChartData, edgeChartOptions, 'Edge', 'rgb(224, 201, 163)');
     updateHalfCycleChart(placeHolder, placeHolderChartData, placeHolderChartOptions, 'PlaceHolder', '#05c8ff');
