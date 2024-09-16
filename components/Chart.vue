@@ -8,7 +8,8 @@
       
         <div v-if="!isMushroomHouse" class="absolute top-[41%] text-5xl font-bold">{{ co2Concentration[co2Concentration.length - 1] }}</div>
         <div v-if="isMushroomHouse" class="absolute top-[41%] text-5xl font-bold">{{ light[light.length - 1] }}</div>
-        <div class="absolute top-[75%] text-xl font-bold">PPM</div>
+        <div v-if="!isMushroomHouse" class="absolute top-[75%] text-xl font-bold">PPM</div>
+        <div v-if="isMushroomHouse" class="absolute top-[75%] text-xl font-bold">LUX</div>
         <Doughnut v-if="!isMushroomHouse" :data="co2ConcentrationHalfCycleChartData" :options="co2ConcentrationHalfCycleChartOptions" />
         <Doughnut v-if="isMushroomHouse" :data="lightHalfCycleChartData" :options="lightHalfCycleChartOptions" />
         <div class="absolute bottom-[0%] left-[25%] text-sm">0</div>
