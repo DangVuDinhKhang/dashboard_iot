@@ -16,7 +16,7 @@
                       <input type="number" id="username" v-model="needToUpdateValue" class="block w-100 rounded-md border-0 py-2 pl-2 pr-2 text-gray-900 ring-1 ring-inset ring-gray-300 focus:outline-none focus:ring" placeholder="" min="0">
                       <div class="slider">
                         <input v-if="typeSetting == 'co2Concentration'" type = "range" min="0" max="5000" v-model="needToUpdateValue"/>
-                        <input v-else-if="typeSetting == 'light'" type = "range" min="0" max="2000" v-model="needToUpdateValue"/>
+                        <input v-else-if="typeSetting == 'light'" type = "range" min="0" max="3000" v-model="needToUpdateValue"/>
                         <input v-else type = "range" min="0" max="100" v-model="needToUpdateValue"/>
                       </div>
                     </div>

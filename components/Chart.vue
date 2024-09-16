@@ -13,8 +13,8 @@
         <Doughnut v-if="!isMushroomHouse" :data="co2ConcentrationHalfCycleChartData" :options="co2ConcentrationHalfCycleChartOptions" />
         <Doughnut v-if="isMushroomHouse" :data="lightHalfCycleChartData" :options="lightHalfCycleChartOptions" />
         <div class="absolute bottom-[0%] left-[25%] text-sm">0</div>
-        <div v-if="!isMushroomHouse" class="absolute bottom-[0%] left-[67%] text-sm">100</div>
-        <div v-if="isMushroomHouse" class="absolute bottom-[0%] left-[67%] text-sm">2000</div>
+        <div v-if="!isMushroomHouse" class="absolute bottom-[0%] left-[67%] text-sm">5000</div>
+        <div v-if="isMushroomHouse" class="absolute bottom-[0%] left-[67%] text-sm">3000</div>
         <img v-if="!isMushroomHouse" src="../public/assets/icon/co2.png" alt="co2 icon" class="absolute co2-img top-[-10%] left-[-10%] text-4xl">
         <img v-if="isMushroomHouse" src="../public/assets/icon/Light.png" alt="co2 icon" class="absolute co2-img top-[-10%] left-[-10%] text-4xl">
       </div>
@@ -522,6 +522,7 @@ const updateHalfCycleChart = (type, typeChart, typeChartOption, title, color) =>
   let circumference = 240;
   let cutout = 78;
   let display = true;
+  let max = 100;
   if (title == 'Humidity') {
     rotation = -120;
     circumference = 240;
@@ -535,7 +536,12 @@ const updateHalfCycleChart = (type, typeChart, typeChartOption, title, color) =>
   } else if (title.includes('Temperature')) {
     rotation = -90;
     circumference = 360; 
-    cutout = 75
+    cutout = 75;
+  } 
+  if (title == 'CO2 Concentration') {
+    max = 5000;
+  } else if (title == 'Light') {
+    max = 3000;
   }
 
   typeChart.value = {
@@ -543,7 +549,7 @@ const updateHalfCycleChart = (type, typeChart, typeChartOption, title, color) =>
     datasets: [
       {
         label: '',
-        data: [type.value[type.value.length - 1], 100 - type.value[type.value.length - 1]],
+        data: [type.value[type.value.length - 1], max - type.value[type.value.length - 1]],
         backgroundColor: [
           color,
           "#e5e7eb"
